@@ -9,7 +9,7 @@ resource_ip=""
 # 秘钥路径
 key_path="~/.totp/bastionhost.key"
 # 运行命令
-runcmd="cd /appdata/logs/"
+runcmd="pwd"
 
 # 解析命令行参数
 while getopts "h:r:k:c:" opt; do
@@ -33,5 +33,5 @@ while getopts "h:r:k:c:" opt; do
   esac
 done
 
-# 调用 expect 脚本，并传递参数
-sshfb.exp "$bastionhost_ip" "$resource_ip" "$key_path" "$runcmd"
+# 调用 expect 脚本并传递参数
+sshb.exp "$bastionhost_ip" "$resource_ip" "$key_path" "$runcmd"
