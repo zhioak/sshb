@@ -1,0 +1,55 @@
+#!/usr/bin/expect -f
+
+set timeout 10
+
+# 解析命令行参数
+
+# 堡垒机ip
+set bastionhost_ip [lindex $argv 0]
+# 资源ip
+set resource_ip [lindex $argv 1]
+# otp秘钥
+set key_path [lindex $argv 2]
+# 执行命令
+set runcmd [lindex $argv 3]
+
+# 堡垒机一次只允许输入一个字符
+proc send_bastionhost {input_string} {  
+    set string_length [string length $input_string]  
+	for {set i 0} {$i < $string_length} {incr i} {  
+	    set char [string index $input_string $i]  
+	    exp_send  -- "$char"
+	    after 60
+	}
+}
+
+# 选择TOTP
+spawn ssh $bastionhost_ip
+expect "*请选择多因子认证方式*"
+send_bastionhost "2\r"
+
+expect "*OTP*"
+# 解密TOTP秘钥
+set totp_secret [exec sh -c "sshenc -s ~/.ssh/id_rsa < $key_path"] 
+
+# 生成一次性密码
+set otp [exec sh -c "oathtool --totp -b $totp_secret"]  
+send_bastionhost "$otp\r"
+
+# 搜索资源
+expect "*操作命令*"
+send_bastionhost "s"
+
+if { $resource_ip ne "" } {
+	
+	# ip不为空直接进入
+	send_bastionhost "$resource_ip\r"
+	send_bastionhost "1\r"
+	
+	# 执行命令
+	if { $runcmd ne "" } {
+		send_bastionhost "$runcmd\r"
+	}
+}
+
+interact

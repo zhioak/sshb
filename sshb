@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# 初始化参数
+
+# 堡垒机ip
+bastionhost_ip="bastionhost"
+# 联机的资源ip
+resource_ip=""
+# 秘钥路径
+key_path="~/.totp/bastionhost.key"
+# 运行命令
+runcmd="cd /appdata/logs/"
+
+# 解析命令行参数
+while getopts "h:r:k:c:" opt; do
+  case ${opt} in
+    h )
+      bastionhost_ip=$OPTARG
+      ;;
+    r )
+      resource_ip=$OPTARG
+      ;;
+    k )
+      key_path=$OPTARG
+      ;;
+    c )
+      runcmd=$OPTARG
+      ;;
+    \? )
+      echo "Usage: cmd [-h bastionhost_ip] [-r resource_ip] [-k key_path] [-c command]"
+      exit 1
+      ;;
+  esac
+done
+
+# 调用 expect 脚本，并传递参数
+sshfb.exp "$bastionhost_ip" "$resource_ip" "$key_path" "$runcmd"
