@@ -6,7 +6,7 @@
 - 跳转到指定资源
 - 执行命令
 
-## ⚙️ Usage
+## 🔧 Installation
 
 拉取Git仓库到本地
 
@@ -19,6 +19,8 @@ git clone git@github.com:zhiozhou/sshb.git
 ```bash
 sudo cp ~/.ssh/sshb* /usr/local/bin/ 
 ```
+
+## ⚙️ Usage
 
 连接堡垒机资源
 
