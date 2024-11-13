@@ -17,7 +17,7 @@ git clone git@github.com:zhiozhou/sshb.git
 将命令添加到本地
 
 ```bash
-sudo cp ~/.ssh/sshb* /usr/local/bin/ 
+sudo cp sshb/sshb* /usr/local/bin/ 
 ```
 
 ## ⚙️ 使用
