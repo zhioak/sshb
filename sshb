@@ -1,7 +1,9 @@
 #!/bin/bash
 
-# 初始化参数
+# 解决exp脚本连接后sz/rz假死问题
+export LC_CTYPE=en_US
 
+# 初始化参数
 # 堡垒机ip
 bastionhost_ip="bastionhost"
 # 联机的资源ip
