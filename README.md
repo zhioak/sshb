@@ -11,7 +11,7 @@
 拉取Git仓库到本地
 
 ```bash
-git clone git@github.com:zhiozhou/sshb.git
+git clone git@github.com:zhioak/sshb.git
 ```
 
 将命令添加到本地
