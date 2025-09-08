@@ -13,6 +13,11 @@ set key_path [lindex $argv 2]
 # 执行命令
 set runcmd [lindex $argv 3]
 
+# home
+set home_dir [exec sh -c {echo $HOME}]
+# ssh known_hosts
+set known_hosts "$home_dir/.ssh/known_hosts"
+
 # 堡垒机一次只允许输入一个字符
 proc send_bastionhost {input_string} {  
     set string_length [string length $input_string]  
@@ -25,8 +30,23 @@ proc send_bastionhost {input_string} {
 
 # 选择TOTP
 spawn ssh $bastionhost_ip
-expect "*请选择多因子认证方式*"
-send_bastionhost "2\r"
+expect {
+    "*REMOTE HOST IDENTIFICATION HAS CHANGED*" {
+        # 清理known_hosts
+        exec sed -i '' "/$bastionhost_ip/d" $known_hosts
+        # 重新SSH
+        spawn ssh $bastionhost_ip
+        exp_continue
+    }
+    # 再次保存know_hosts
+    "*This key is not known by any other names*" {
+        send "yes\r"
+        exp_continue
+    }
+    "*请选择多因子认证方式*" {
+        send_bastionhost "2\r"
+    }
+}
 
 expect "*OTP*"
 # 解密TOTP秘钥
