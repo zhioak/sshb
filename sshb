@@ -9,7 +9,7 @@ bastionhost_ip="bastionhost"
 # 联机的资源ip
 resource_ip=""
 # 秘钥路径
-key_path="~/.totp/bastionhost.key"
+key_path="~/.totp/Bastionhost.key"
 # 运行命令
 runcmd="pwd"
 
